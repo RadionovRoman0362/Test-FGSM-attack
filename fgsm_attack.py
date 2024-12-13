@@ -74,7 +74,7 @@ class FGSM_Attack:
 
 			success_rate = successful_attacks / float(len(self.images))
 			print("Epsilon: {}\tAttack Success Rate = {} / {} = {:.2f}".format(eps, successful_attacks,
-																		   len(self.images), success_rate))
+																			   len(self.images), success_rate))
 
 	def visualize(self):
 		plt.figure(figsize=(8, 10))
