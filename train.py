@@ -20,9 +20,9 @@ model.compile(optimizer='adam',
               loss='categorical_crossentropy',
               metrics=['accuracy'])
 
-model.fit(train_images, # данные для обучения
-          train_labels, #
-          epochs=10,    # кол-во эпох обучения
-          validation_data=(test_images, test_labels)) # данные для проверки
+model.fit(train_images,
+          train_labels,
+          epochs=10,
+          validation_data=(test_images, test_labels))
 
 model.save('mnist_model.keras')
