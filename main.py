@@ -12,13 +12,15 @@ test_labels = to_categorical(test_labels)
 
 model = tf.keras.models.load_model('mnist_model.keras')
 
-epsilons = [0.1, 0.15, 0.2, 0.25, 0.3]
+epsilons = [0.1, 0.15, 0.2, 0.25, 0.3] # Change to set different epsilons
 
-test_range = 100
+test_range = 100 # Change to set an amount of generated adversarial examples
 test_index = random.randrange(len(test_images - test_range))
 
-fgsm_attack = FGSM_Attack(model, test_images[test_index:test_index + test_range],
-                          test_labels[test_index:test_index + test_range], epsilons)
+fgsm_attack = FGSM_Attack(model,
+                          test_images[test_index:test_index + test_range],
+                          test_labels[test_index:test_index + test_range],
+                          epsilons) # Add target=<x> argument to perform targeted attack
 fgsm_attack.run()
 
 fgsm_attack.visualize()
