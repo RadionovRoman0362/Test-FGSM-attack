@@ -26,8 +26,9 @@ class FGSM_Attack:
 				min_conf = conf
 		return result_id, result_conf
 
-	def perturb(self, image, eps, signed_grad):
-		if self.target:
+	@staticmethod
+	def perturb(image, eps, signed_grad, target):
+		if target:
 			adv = (image - (signed_grad * eps)).numpy()
 		else:
 			adv = (image + (signed_grad * eps)).numpy()
@@ -51,12 +52,17 @@ class FGSM_Attack:
 				with tf.GradientTape() as tape:
 					tape.watch(image)
 					prediction = self.model(image)
-					loss = self.loss_object(label, prediction)
+					if self.target is not None:
+						target_label = np.zeros(shape=(1, 10))
+						target_label[0][self.target] = 1
+						loss = self.loss_object(target_label, prediction)
+					else:
+						loss = self.loss_object(label, prediction)
 				gradient = tape.gradient(loss, image)
 				signed_grad = tf.sign(gradient)
 
 				# perturb
-				adversary = self.perturb(image, eps, signed_grad)
+				adversary = self.perturb(image, eps, signed_grad, self.target)
 				cls_orig, conf_orig = self.decode_prediction(label)
 				cls_adv, conf_adv = self.decode_prediction(self.model(adversary))
 				if self.target:
